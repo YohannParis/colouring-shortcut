@@ -1,19 +1,10 @@
 # Coloring Page HTTP Server Setup
 
-## Step 1: Save Your Files
+## Step 1: Make the files executable
 
-1. **Save your coloring script** as `~/coloring_script.sh`:
-
-2. **Make the script executable**:
 ```bash
-chmod +x ~/coloring_script.sh
-```
-
-3. **Save the Python server** as `~/coloring_server.py` (from the first artifact above)
-
-4. **Make the server executable**:
-```bash
-chmod +x ~/coloring_server.py
+chmod +x coloring_script.sh
+chmod +x coloring_server.py
 ```
 
 ## Step 2: Test Your Setup
@@ -53,12 +44,12 @@ curl "http://YourComputerName.local:8080?idea=dinosaur"
 2. **Save the plist file**:
 ```bash
 # Replace YOUR_USERNAME with your actual username
-cp com.user.coloring-server.plist ~/Library/LaunchAgents/
+sudo cp com.user.coloring-server.plist /Library/LaunchAgents/
 ```
 
 3. **Load the service**:
 ```bash
-launchctl load ~/Library/LaunchAgents/com.user.coloring-server.plist
+launchctl load /Library/LaunchAgents/com.user.coloring-server.plist
 ```
 
 4. **Start the service**:
