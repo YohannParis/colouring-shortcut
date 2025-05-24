@@ -3,25 +3,13 @@
 ## Step 1: Save Your Files
 
 1. **Save your coloring script** as `~/coloring_script.sh`:
-```bash
-#!/bin/bash
-PROMPT="Create a printable coloring image in black and white, for kids to fill the empty spaces. Keep it simple. Use the following idea: __input__"
-FINAL_PROMPT="${PROMPT//__input__/$1}"
-curl -s -X POST "https://api.openai.com/v1/images/generations" \
-    -H "Authorization: Bearer $OPENAI_API_KEY" \
-    -H "Content-type: application/json" \
-    -d "{
-       \"model\": \"gpt-image-1\",
-       \"prompt\": \"$FINAL_PROMPT\"\
-    }" | jq -r '.data[0].b64_json' | base64 -D | lpr
-```
 
 2. **Make the script executable**:
 ```bash
 chmod +x ~/coloring_script.sh
 ```
 
-3. **Save the Python server** as `~/coloring_server.py` (from the first artifact above)
+3. **Save the Python server** as `~/coloring_server.py`
 
 4. **Make the server executable**:
 ```bash
@@ -73,6 +61,12 @@ launchctl load ~/Library/LaunchAgents/com.user.coloring-server.plist
 launchctl start com.user.coloring-server
 ```
 
+### Restart the service:
+```bash
+launchctl unload ~/Library/LaunchAgents/com.user.coloring-server.plist
+launchctl load ~/Library/LaunchAgents/com.user.coloring-server.plist
+```
+
 5. **Check if it's running**:
 ```bash
 launchctl list | grep coloring-server
@@ -92,31 +86,6 @@ The server will:
 2. Generate a coloring page using OpenAI
 3. Send it directly to your printer
 4. Return a JSON response confirming success
-
-## Troubleshooting
-
-### Check server logs:
-```bash
-tail -f ~/coloring_server.log
-tail -f ~/coloring_server_error.log
-```
-
-### Stop the service:
-```bash
-launchctl stop com.user.coloring-server
-launchctl unload ~/Library/LaunchAgents/com.user.coloring-server.plist
-```
-
-### Restart the service:
-```bash
-launchctl unload ~/Library/LaunchAgents/com.user.coloring-server.plist
-launchctl load ~/Library/LaunchAgents/com.user.coloring-server.plist
-```
-
-### Check if service is loaded:
-```bash
-launchctl list | grep coloring
-```
 
 ## Requirements
 
