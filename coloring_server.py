@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 
 PORT = 8080
-HOST = 'localhost'
+HOST = '0.0.0.0'  # Listen on all network interfaces
 
 class ColoringHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
@@ -129,20 +129,40 @@ class ColoringHandler(http.server.BaseHTTPRequestHandler):
         print(f"[{self.log_date_time_string()}] {format % args}")
 
 def main():
-    print(f"Starting Coloring Page HTTP Server on {HOST}:{PORT}")
-    print(f"Access it at: http://{HOST}:{PORT}")
+    import socket
+    
+    # Get the computer's hostname and local IP
+    hostname = socket.gethostname()
+    bonjour_name = hostname if hostname.endswith('.local') else f"{hostname}.local"
+    
+    # Get local IP address
+    try:
+        # Connect to a remote address to determine local IP
+        with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+            s.connect(("8.8.8.8", 80))
+            local_ip = s.getsockname()[0]
+    except:
+        local_ip = "Unable to determine"
+    
+    print(f"Starting Coloring Page HTTP Server")
+    print(f"Listening on all network interfaces, port {PORT}")
+    print(f"\nAccess the server using:")
+    print(f"  Local:     http://localhost:{PORT}")
+    print(f"  LAN IP:    http://{local_ip}:{PORT}")
+    print(f"  Bonjour:   http://{bonjour_name}:{PORT}")
     print(f"\nExample usage:")
-    print(f"  http://{HOST}:{PORT}?idea=dinosaur")
-    print(f"  http://{HOST}:{PORT}?idea=princess%20castle")
-    print(f"  http://{HOST}:{PORT}?idea=fire%20truck")
+    print(f"  http://{bonjour_name}:{PORT}?idea=dinosaur")
+    print(f"  http://{bonjour_name}:{PORT}?idea=princess%20castle")
+    print(f"  http://{bonjour_name}:{PORT}?idea=fire%20truck")
     print(f"\nMake sure:")
     print(f"  - OPENAI_API_KEY environment variable is set")
     print(f"  - Your coloring script is at ~/coloring_script.sh (or update script_path)")
     print(f"  - Printer is connected and ready")
+    print(f"  - Firewall allows connections on port {PORT}")
     print(f"\nPress Ctrl+C to stop the server")
     
     try:
-        with socketserver.TCPServer((HOST, PORT), ColoringHandler) as httpd:
+        with socketserver.TCPServer(("0.0.0.0", PORT), ColoringHandler) as httpd:
             httpd.serve_forever()
     except KeyboardInterrupt:
         print("\nServer stopped by user")
