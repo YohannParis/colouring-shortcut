@@ -65,7 +65,7 @@ class ColoringHandler(http.server.BaseHTTPRequestHandler):
             }
         
         # Path to your coloring script
-        script_path = os.path.expanduser('~/coloring_script.sh')  # Adjust path as needed
+        script_path = os.path.expanduser('coloring_script.sh')  # Adjust path as needed
         
         # Check if script exists
         if not os.path.exists(script_path):
@@ -156,7 +156,7 @@ def main():
     print(f"  http://{bonjour_name}:{PORT}?idea=fire%20truck")
     print(f"\nMake sure:")
     print(f"  - OPENAI_API_KEY environment variable is set")
-    print(f"  - Your coloring script is at ~/coloring_script.sh (or update script_path)")
+    print(f"  - Your coloring script is at coloring_script.sh (or update script_path)")
     print(f"  - Printer is connected and ready")
     print(f"  - Firewall allows connections on port {PORT}")
     print(f"\nPress Ctrl+C to stop the server")
