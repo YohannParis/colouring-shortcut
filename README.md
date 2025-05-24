@@ -11,10 +11,8 @@ curl -s -X POST "https://api.openai.com/v1/images/generations" \
     -H "Authorization: Bearer $OPENAI_API_KEY" \
     -H "Content-type: application/json" \
     -d "{
-       \"model\": \"dall-e-3\",
-       \"prompt\": \"$FINAL_PROMPT\",
-       \"size\": \"1024x1024\",
-       \"response_format\": \"b64_json\"
+       \"model\": \"gpt-image-1\",
+       \"prompt\": \"$FINAL_PROMPT\"\
     }" | jq -r '.data[0].b64_json' | base64 -D | lpr
 ```
 
